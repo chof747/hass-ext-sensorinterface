@@ -13,15 +13,21 @@ services:
       sensorif-dev:
         aliases:
           - devenv
-  myalpine:
-    image: alpine
-    container_name: stub
-    command: sleep infinity
+  mqtt-broker:
+    image: eclipse-mosquitto
+    container_name: sensorif-dev-mqtt
+    ports:
+      - 1883:1883
+      - 8883:8883
     networks:
       sensorif-dev:
         aliases:
-          - alpine
-
+          - mqtt
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - ./tests/stubs/mosquitto:/mosquitto/config
 networks:
   sensorif-dev:
     name: sensorif-dev

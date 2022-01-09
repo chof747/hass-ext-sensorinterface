@@ -14,7 +14,7 @@ ifdef HAS_APK
 	apk add libxml2-dev libxslt-dev
 endif
 ifdef HAS_APT
-	sudo apt update && sudo apt install libxml2-dev libxslt-dev
+	sudo apt update && sudo apt install libxml2-dev libxslt-dev mosquitto-clients
 endif
 	python3 -m pip --disable-pip-version-check install -U setuptools wheel
 	python3 -m pip --disable-pip-version-check install -r requirements.txt

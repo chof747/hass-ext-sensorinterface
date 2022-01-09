@@ -1,0 +1,16 @@
+{
+    "vsmqtt.brokerProfiles": [
+        {
+            "name": "test-mqtt",
+            "host": "localhost",
+            "port": 1883,
+            "clientId": "vsmqtt_client"
+        },
+        {
+            "name": "test-mqtt-devcontainer",
+            "host": "mqtt",
+            "port": 1883,
+            "clientId": "vsmqtt_client"
+        }
+    ]
+}

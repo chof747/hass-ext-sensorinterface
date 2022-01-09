@@ -14,7 +14,8 @@
 		"ms-python.python",
 		"github.vscode-pull-request-github",
 		"ryanluker.vscode-coverage-gutters",
-		"ms-python.vscode-pylance"
+		"ms-python.vscode-pylance",
+		"rpdswtk.vsmqtt"
 	],
 	"settings": {
 		"files.eol": "\n",
