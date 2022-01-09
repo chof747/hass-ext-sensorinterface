@@ -1,24 +1,10 @@
-# Template project for home assistant custom component development projects
+# Sensor Interface
 
-This project is a boilerplate template for custom components development in home assistant
-which is prepared to run also additional services (like an mqtt broker)
+Home Assistant custom component providing sensor data in REST format and for low level network protocols.
 
-This project includes already:
+## Features
 
-- The vscode configuration for a dev container
-- The container definition inside a docker-compose file
-- A stub for a custom component
-
-## Install
-
-1. Copy the repository to any place convenient
-2. Rename the project from sensorinterface to the real name
-3. Adjust the following lines in the docker-compose file to meet the name of your project:
-```yaml
-    volumes:
-      - .:/workspaces/sensorinterface
-```
-4. Adjust the following line in the .devcontainer/devcontainer.json file:
-```json
-	"workspaceFolder": "/workspaces/sensorinterface",
-```
+- Provides most recent data from sensors attached to home assistant grouped by areas, device type
+- Allows REST access to sensors based on entity-id, device class or area
+- provides WebSocket services also for sensor data based on device classes, area or entity id
+- Allows cycling through sensor groups for easy access for small devices
