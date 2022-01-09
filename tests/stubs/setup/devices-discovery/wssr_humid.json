@@ -1,0 +1,9 @@
+{
+    "platform": "mqtt",
+    "state_topic": "home/sleepingroom/humidity",
+    "unit_of_measurement": "%",
+    "name": "wssr_humd",
+    "friendly_name": "Sleeping Room Humidity",
+    "device_class": "humidity",
+    "uniq_id": "wssr_humd00efg"
+}

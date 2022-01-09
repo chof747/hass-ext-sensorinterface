@@ -1,0 +1,8 @@
+{
+    "platform": "mqtt",
+    "state_topic": "home/sleepingroom/temperature",
+    "unit_of_measurement": "°C",
+    "name": "Temparature Sleeping Room",
+    "device_class": "temperature",
+    "uniq_id": "wssr_temp00ea45"
+}
