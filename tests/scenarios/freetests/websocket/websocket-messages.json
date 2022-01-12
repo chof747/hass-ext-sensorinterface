@@ -1,0 +1,10 @@
+[
+    {
+        "type": "auth",
+        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiY2NlMzEwNmNmNzc0NWJlYjRhYTMzOTYzMGI5ZDczOCIsImlhdCI6MTY0MTc0NDk1NiwiZXhwIjoxOTU3MTA0OTU2fQ.ZdqLaXDC4gnX8JKSKYKRD0j7jdrQP8eBkD8MnTHH1y8"
+    },
+    {
+        "id": 42,
+        "type": "sensors/list"
+    }
+]
