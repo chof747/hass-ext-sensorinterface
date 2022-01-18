@@ -22,6 +22,9 @@ endif
 start: ## Start the HA with the integration
 	@bash .devcontainer/integration_start;
 
+test:
+	@bash .devcontainer/integration_start /tmp/hass_test &
+
 lint: ## Run linters
 	pre-commit install-hooks --config .github/pre-commit-config.yaml;
 	pre-commit run --hook-stage manual --all-files --config .github/pre-commit-config.yaml;
