@@ -7,15 +7,13 @@ HASS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiY2NlMzEwNmNmNzc0N
 LOGGER = logging.getLogger("TEST_WEBSOCKET_FIXTURE")
 
 
-def runSocketCommandAndReceiveReturn(
-    command_type: str, command_tag: str = None, command_body: str = None
-):
+def runSocketCommandAndReceiveReturn(command_type: str, parameters: dict = None):
     wc = create_connection("ws://localhost:8123/api/websocket")
     if authenticate(wc):
 
         command = {"type": command_type, "id": 1}
-        if command_tag != None:
-            command[command_tag] = command_body
+        if parameters != None:
+            command.update(parameters)
 
         wc.send(stringifymsg(command))
         result = dignifymsg(wc.recv())

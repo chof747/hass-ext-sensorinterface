@@ -4,20 +4,24 @@ import os
 import logging
 from time import perf_counter, sleep
 from pytest_socket import enable_socket, socket_allow_hosts
-from .fixtures import MqttFixture
-
+from .fixtures import MQTT
 
 DEVICE_DISCOVERY_PATH = "./tests/stubs/setup/devices-discovery/"
 LOGGER = logging.getLogger("TEST FIXTURE")
 MQTT_WAIT_TIME = 12
 
 
-@pytest.fixture(scope="session")
-def hassendpoint():
+@pytest.fixture()
+def sockets():
+    LOGGER.info("enable sockets")
     enable_socket()
-    socket_allow_hosts(["127.0.0.1", "172.22.0.2"])
+    socket_allow_hosts(["127.0.0.1", "172.22.0.2", "172.22.0.3"])
 
-    mqtt_fixture = MqttFixture()
+
+@pytest.fixture()
+def hassendpoint(sockets, MQTT):
+
+    mqtt_fixture = MQTT
     mqtt_fixture.reconnect()
     if checkHomeAssIsRunningLocally():
         return True
@@ -44,14 +48,14 @@ def checkHomeAssIsRunningLocally():
 
 
 def timeout(startTime: float):
-    if (perf_counter() - startTime) > 120:
+    if (perf_counter() - startTime) > 60:
         LOGGER.error("Timeout starting Home Assistant")
         return True
     return False
 
 
 def registerSensors():
-    mqtt_fixture = MqttFixture()
+    mqtt_fixture = MQTT()
     mqtt_devices = [
         f
         for f in os.listdir(DEVICE_DISCOVERY_PATH)

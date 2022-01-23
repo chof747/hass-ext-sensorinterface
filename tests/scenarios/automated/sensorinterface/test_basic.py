@@ -23,7 +23,7 @@ def test_sensors_list(hassendpoint, MQTT):
                 "value": "unknown",
             },
             {
-                "id": "sensor.temparature_sleeping_room",
+                "id": "sensor.wssr_temp",
                 "name": "Temperatur",
                 "area": "Schlafzimmer",
                 "type": "temperature",
@@ -31,7 +31,5 @@ def test_sensors_list(hassendpoint, MQTT):
             },
         ],
     }
-
-    mc.loop_stop()
 
     assert True

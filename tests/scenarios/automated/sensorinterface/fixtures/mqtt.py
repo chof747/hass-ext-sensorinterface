@@ -2,6 +2,7 @@
 
 import logging
 import pytest
+import json
 
 from time import sleep
 from paho.mqtt import client as mqtt
@@ -21,6 +22,9 @@ class MqttFixture(object):
             cls._instance = super(MqttFixture, cls).__new__(cls)
             cls._instance._startUp()
         return cls._instance
+
+    def close(self):
+        self._mqttClient.loop_stop()
 
     def on_connect(self, _client, _userdata, _flags, rc):
         if rc == 0:
@@ -55,10 +59,16 @@ class MqttFixture(object):
         return self._hassStatus == "online"
 
     def registerSensor(self, did, device):
+
+        if type(device) is dict:
+            device = json.dumps(device)
+
         self._mqttClient.reconnect()
         self._mqttClient.publish(f"homeassistant/sensor/{did}/config", device)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def MQTT():
-    return MqttFixture()
+    f = MqttFixture()
+    yield f
+    f.close()

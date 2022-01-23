@@ -2,7 +2,8 @@
     "platform": "mqtt",
     "state_topic": "home/sleepingroom/temperature",
     "unit_of_measurement": "°C",
-    "name": "Temparature Sleeping Room",
+    "name": "wssr_temp",
+    "friendly_name": "Sleeping Room Temperatur",
     "device_class": "temperature",
     "uniq_id": "wssr_temp00ea45"
 }

@@ -6,5 +6,16 @@
     {
         "id": 42,
         "type": "sensors/list"
+    },
+    {
+        "type": "config/entity_registry/update",
+        "entity_id": "sensor.wssr_humd",
+        "area_id": "wohnzimmer",
+        "id": 1
+    },
+    {
+        "type": "config/entity_registry/remove",
+        "entity_id": "sensor.wslr_temp",
+        "id": 50
     }
 ]

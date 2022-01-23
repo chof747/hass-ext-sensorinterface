@@ -2,3 +2,4 @@
 __pycache__
 .env
 scrapbook
+tests/scenarios/freetests/websocket/result.json
