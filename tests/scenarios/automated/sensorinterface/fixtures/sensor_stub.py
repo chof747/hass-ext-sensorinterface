@@ -56,6 +56,10 @@ class SensorStubClass(object):
         else:
             self.sensors.pop(sensor_id)
 
+    def delete_all(self):
+        while len(self.sensors.keys()) > 0:
+            self.delete_sensor(next(iter(self.sensors)))
+
     def update_state(self, id, value):
         mqtt = MqttFixture()
         mc = mqtt.reconnect()
@@ -74,9 +78,11 @@ class SensorStubClass(object):
                     if state["entity_id"] == id:
                         return state["state"]
             return False
-        return 42
+        return False
 
 
 @pytest.fixture()
 def SensorStubs(MQTT):
-    return SensorStubClass()
+    sensorstub = SensorStubClass()
+    yield sensorstub
+    sensorstub.delete_all()

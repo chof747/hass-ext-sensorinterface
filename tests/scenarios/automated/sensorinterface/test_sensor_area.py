@@ -13,5 +13,5 @@ def test_sensor_stub(sockets, hassendpoint, SensorStubs):
     assert pytest.approx(
         float(SensorStubs.get_state(sensor_id)), 0.01
     ) == pytest.approx(23.4, 0.01)
-    SensorStubs.delete_sensor(sensor_id)
+    # SensorStubs.delete_sensor(sensor_id)
 
