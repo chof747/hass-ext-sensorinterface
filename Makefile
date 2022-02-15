@@ -19,11 +19,15 @@ endif
 	python3 -m pip --disable-pip-version-check install -U setuptools wheel
 	python3 -m pip --disable-pip-version-check install -r requirements.txt
 
+reset:
+	rm -rf ./tests/stubs/hass/config
+	tar zxf ./tests/stubs/hass/hass-config.tar.gz --directory ./tests/stubs/hass
+
 start: ## Start the HA with the integration
 	@bash .devcontainer/integration_start;
 
 test:
-	@bash .devcontainer/integration_start /tmp/hass_test &
+	@bash .devcontainer/integration_start /tmp/hass_test & ./tests/stubs/hass
 
 lint: ## Run linters
 	pre-commit install-hooks --config .github/pre-commit-config.yaml;
