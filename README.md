@@ -24,11 +24,57 @@ The *major design principles* for the APIs are therefore:
 
 1. Provide suitable grouping of sensors
 2. Allow consumers first to learn about the groups and then retrieve the single sensors of a group or the full set
-3. Get operations for single sensors enable cycling through the data 
+3. Get operations for single sensors enable cycling through the data
 4. Data provided in a call contain always the technical IDs as well as the friendly names of the sensors as well as the groups
 
 ## API Structure
 
-### sensor/areas
+### sensors/areas
+
+Provides sensor data structured by areas:
+
+#### List the areas
+
+Provides a list of areas as strings
+
+The format is like this
+
+```json
+[
+    "<Name of the area 1>",
+    "<Name of area 2>",
+    ...
+]
+```
+
+#### Get the next sensor in an area
+
+Provides the next sensor (ordered by type and name) from the _current_ one. If _current_ is not provided it starts with the first in the order. If _current_ is the last in the ordered list, it proceeds with the first, thus cycling through the sensors in an area
+
+The websocket command for this command is provided in the following form:
+
+```json
+    {
+        "type" : "sensors/areas/next",
+        "area" : "<id of the area",
+        "current" : "<id of the current sensor>"
+
+    }
+```
+
+- for _current_ the id of the sensor is used. If no id is provided it starts from the beginning
+- for _area_ the id of an area needs to be provided
+
+99. The format of a sensor reading is as follows:
+
+```json
+{
+    "id"    : "<entity id>",
+    "name"  : "Friendly Name of the sensor",
+    "type"  : "temperature|humidity|pressure|power ...",
+    "value" : <Value of the Sensor>,
+    "unit"  : "The unit of measurement of the sensor"
+}
+```
 
 ### sensor/types

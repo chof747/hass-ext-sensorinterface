@@ -3,7 +3,7 @@ import logging
 
 from websocket import WebSocket, create_connection
 
-HASS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiY2NlMzEwNmNmNzc0NWJlYjRhYTMzOTYzMGI5ZDczOCIsImlhdCI6MTY0MTc0NDk1NiwiZXhwIjoxOTU3MTA0OTU2fQ.ZdqLaXDC4gnX8JKSKYKRD0j7jdrQP8eBkD8MnTHH1y8"
+HASS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIxNzI0YmI3MTY2NzU0MDdiYmIzODY0ODNjNTJiYzdiOSIsImlhdCI6MTY0NDE1MTAyNSwiZXhwIjoxOTU5NTExMDI1fQ.0Qv5YJy5UuMWU9Win5273P0JurWSK3ZoyO1LhNNwzX8"
 LOGGER = logging.getLogger("TEST_WEBSOCKET_FIXTURE")
 
 
@@ -15,10 +15,17 @@ def runSocketCommandAndReceiveReturn(command_type: str, parameters: dict = None)
         if parameters != None:
             command.update(parameters)
 
+        LOGGER.debug("Will send")
+        LOGGER.debug(stringifymsg(command))
         wc.send(stringifymsg(command))
         result = dignifymsg(wc.recv())
     wc.close()
-    return result
+
+    if "result" in result:
+        return result
+    else:
+        LOGGER.error(result)
+        return False
 
 
 def authenticate(wc: WebSocket):

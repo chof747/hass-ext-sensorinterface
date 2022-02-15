@@ -1,4 +1,4 @@
-from array import array
+from time import sleep
 from .websocket import runSocketCommandAndReceiveReturn
 from .mqtt import MQTT, MqttFixture
 
@@ -14,10 +14,20 @@ class SensorStubClass(object):
     def __init__(self):
         self.sensors = {}
 
-    def _assignSensorToArea(self, sensor_id: str, area: str):
+    def _finalizeSensorToArea(
+        self, sensor_id: str, area: str, friendly_name: str, device_class: str
+    ):
+
         result = runSocketCommandAndReceiveReturn(
-            "config/entity_registry/update", {"entity_id": sensor_id, "area_id": area}
+            "config/entity_registry/update",
+            {
+                "entity_id": sensor_id,
+                "area_id": area,
+                "name": friendly_name,
+                "device_class": device_class,
+            },
         )
+
         if not result["success"]:
             LOGGER.error(result)
             raise RuntimeError()
@@ -26,7 +36,7 @@ class SensorStubClass(object):
 
         uid = "".join(random.choice(string.hexdigits) for i in range(5))
         sensor_id = f"sensor.{id}"
-        state_topic = f"home/{area}/{type}"
+        state_topic = f"home/{area}/{type}/{id}"
 
         mqtt = MqttFixture()
         mqtt.reconnect()
@@ -40,10 +50,10 @@ class SensorStubClass(object):
             "uniq_id": f"{id}-{uid}",
         }
 
-        mqtt.registerSensor(id, sensor_mqtt)
-        self._assignSensorToArea(sensor_id, area)
+        while self.get_state(sensor_id) == False:
+            mqtt.registerSensor(id, sensor_mqtt)
+        self._finalizeSensorToArea(sensor_id, area, name, sensor_type)
         self.sensors[sensor_id] = state_topic
-
         return sensor_id
 
     def delete_sensor(self, sensor_id: str):
