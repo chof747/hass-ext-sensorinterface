@@ -107,3 +107,71 @@ def test_sensors_areas_next(sockets, hassendpoint, SensorStubs):
         "unit": "%",
         "id": "sensor.wslr_humd",
     }
+
+
+# **************************************************************************************
+def test_sensors_areas_prev(sockets, hassendpoint, SensorStubs):
+    sensor_ids = setupSensors1(SensorStubs)
+
+    result = runSocketCommandAndReceiveReturn(
+        "sensors/areas/prev", {"area": "wohnzimmer"}
+    )
+
+    assert result != False
+    assert result["result"] == {
+        "name": "Temperature Living Room",
+        "type": "temperature",
+        "value": "21.7",
+        "unit": "°C",
+        "id": "sensor.wslr_temp",
+    }
+
+    result = runSocketCommandAndReceiveReturn(
+        "sensors/areas/prev", {"area": "wohnzimmer", "current": result["result"]["id"]}
+    )
+
+    assert result != False
+    assert result["result"] == {
+        "name": "Laptop inner Temperature",
+        "type": "temperature",
+        "value": "34.5",
+        "unit": "°C",
+        "id": "sensor.wslr_tmp2",
+    }
+
+    result = runSocketCommandAndReceiveReturn(
+        "sensors/areas/prev", {"area": "wohnzimmer", "current": result["result"]["id"]}
+    )
+    assert result != False
+    assert result["result"] == {
+        "name": "Air Pressure Living Room",
+        "type": "pressure",
+        "value": "1014.12",
+        "unit": "mbar",
+        "id": "sensor.wslr_airp",
+    }
+
+    result = runSocketCommandAndReceiveReturn(
+        "sensors/areas/prev", {"area": "wohnzimmer", "current": result["result"]["id"]}
+    )
+    assert result != False
+    assert result["result"] == {
+        "name": "Humidity Living Room",
+        "type": "humidity",
+        "value": "44.2",
+        "unit": "%",
+        "id": "sensor.wslr_humd",
+    }
+
+    result = runSocketCommandAndReceiveReturn(
+        "sensors/areas/prev", {"area": "wohnzimmer", "current": result["result"]["id"]}
+    )
+    assert result != False
+    assert result["result"] == {
+        "name": "Temperature Living Room",
+        "type": "temperature",
+        "value": "21.7",
+        "unit": "°C",
+        "id": "sensor.wslr_temp",
+    }
+

@@ -48,16 +48,32 @@ async def get_next_sensor_in_area(hass: HomeAssistant, area: str, current: str) 
     if sorted_sensors != None:
 
         selected = sorted_sensors[0]
-        for i in range(0, len(sorted_sensors)):
+        for i in range(len(sorted_sensors)):
             if current == sorted_sensors[i].entity_id:
                 if (i + 1) < len(sorted_sensors):
                     selected = sorted_sensors[i + 1]
-                    break
-                else:
-                    selected = sorted_sensors[0]
-                    break
+                break
 
         return build_result(hass, selected)
     else:
         return {}
 
+
+async def get_prev_sensor_in_area(hass: HomeAssistant, area: str, current: str) -> dict:
+    sorted_sensors = await prepare_sensor_list(hass, area)
+
+    if sorted_sensors != None:
+
+        selected = sorted_sensors[len(sorted_sensors) - 1]
+        for i in reversed(range(len(sorted_sensors))):
+            if current == sorted_sensors[i].entity_id:
+                if (i - 1) >= 0:
+                    selected = sorted_sensors[i - 1]
+                    break
+                else:
+                    selected = sorted_sensors[len(sorted_sensors) - 1]
+                    break
+
+        return build_result(hass, selected)
+    else:
+        return {}
