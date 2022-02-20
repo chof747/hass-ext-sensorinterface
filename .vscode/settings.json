@@ -12,5 +12,10 @@
             "port": 1883,
             "clientId": "vsmqtt_client"
         }
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
