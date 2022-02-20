@@ -10,7 +10,8 @@ _LOGGER = logging.getLogger(__name__)
 
 async def get_all_areas(hass: HomeAssistant) -> array:
     area_reg = await area_registry.async_get_registry(hass)
-    result = list(map(lambda area: area.id, area_reg.async_list_areas()))
+    areas = list(map(lambda area: area.id, area_reg.async_list_areas()))
+    result = {k: area_reg.async_get_area(k).name for k in areas}
     return result
 
 

@@ -35,14 +35,14 @@ Provides sensor data structured by areas:
 
 #### List the areas
 
-Provides a list of areas as strings
+Provides a dictonary of the area ids as keys and the name of the areas as values
 
 The format is like this
 
 ```json
 [
-    "<Name of the area 1>",
-    "<Name of area 2>",
+    "<Id of Area 1>" : "<Name of the area 1>",
+    "<Id of Area 2>" : "<Name of area 2>",
     ...
 ]
 ```

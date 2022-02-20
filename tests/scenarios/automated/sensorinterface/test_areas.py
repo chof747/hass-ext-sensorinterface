@@ -9,7 +9,11 @@ LOGGER = logging.getLogger("AREA_TEST")
 # **************************************************************************************
 def test_sensors_areas(sockets, hassendpoint):
     result = runSocketCommandAndReceiveReturn("sensors/areas")
-    assert result["result"] == ["wohnzimmer", "kuche", "schlafzimmer"]
+    assert result["result"] == {
+        "wohnzimmer": "Wohnzimmer",
+        "kuche": "Küche",
+        "schlafzimmer": "Schlafzimmer",
+    }
 
 
 # **************************************************************************************
