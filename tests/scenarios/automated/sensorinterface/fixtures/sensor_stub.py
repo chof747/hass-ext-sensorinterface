@@ -56,6 +56,43 @@ class SensorStubClass(object):
         self.sensors[sensor_id] = state_topic
         return sensor_id
 
+    def create_sensor_with_device(
+        self,
+        id: str,
+        name: str,
+        sensor_type: str,
+        unit: str,
+        device: str,
+        device_name: str,
+        device_area: str,
+    ):
+
+        uid = "".join(random.choice(string.hexdigits) for i in range(5))
+        sensor_id = f"sensor.{id}"
+        state_topic = f"home/{device}/{type}/{id}"
+
+        mqtt = MqttFixture()
+        mqtt.reconnect()
+        sensor_mqtt = {
+            "platform": "mqtt",
+            "state_topic": state_topic,
+            "unit_of_measurement": unit,
+            "name": id,
+            "friendly_name": name,
+            "device_class": sensor_type,
+            "uniq_id": f"{id}-{uid}",
+            "device": {
+                "identifiers": [device],
+                "name": device_name,
+                "suggested_area": device_area,
+            },
+        }
+        while self.get_state(sensor_id) == False:
+            mqtt.registerSensor(id, sensor_mqtt)
+        self._finalizeSensorToArea(sensor_id, None, name, sensor_type)
+        self.sensors[sensor_id] = state_topic
+        return sensor_id
+
     def delete_sensor(self, sensor_id: str):
         result = runSocketCommandAndReceiveReturn(
             "config/entity_registry/remove", {"entity_id": sensor_id}

@@ -179,3 +179,22 @@ def test_sensors_areas_prev(sockets, hassendpoint, SensorStubs):
         "id": "sensor.wslr_temp",
     }
 
+
+def test_sensors_from_device(sockets, hassendpoint, SensorStubs):
+    sensor_id = SensorStubs.create_sensor_with_device(
+        "ovki_temp", "Ofen Temperatur", "temperature", "°C", "oven", "Ofen", "Küche"
+    )
+
+    SensorStubs.update_state(sensor_id, 125)
+    LOGGER.info(sensor_id)
+
+    result = runSocketCommandAndReceiveReturn("sensors/areas/prev", {"area": "kuche"})
+
+    assert result != False
+    assert result["result"] == {
+        "name": "Ofen Temperatur",
+        "type": "temperature",
+        "value": "125",
+        "unit": "°C",
+        "id": "sensor.ovki_temp",
+    }

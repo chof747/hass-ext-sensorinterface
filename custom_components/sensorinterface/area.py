@@ -3,7 +3,7 @@ import logging
 from operator import attrgetter
 from xml.dom.minidom import Entity
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import area_registry, entity_registry
+from homeassistant.helpers import area_registry, entity_registry, device_registry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -18,13 +18,21 @@ async def get_all_areas(hass: HomeAssistant) -> array:
 async def prepare_sensor_list(hass: HomeAssistant, area: str) -> list:
     eids = hass.states.async_entity_ids("sensor")
     ent_reg = await entity_registry.async_get_registry(hass)
+    dev_reg = await device_registry.async_get_registry(hass)
     sensors = []
-    selected = None
 
     for eid in eids:
         entity = ent_reg.async_get(eid)
-        if entity.area_id == area:
-            sensors.append(entity)
+        if entity != None:
+            aid = None
+            if entity.area_id == None:
+                dev = dev_reg.async_get(entity.device_id)
+                if dev != None:
+                    aid = dev.area_id
+            else:
+                aid = entity.area_id
+            if aid == area:
+                sensors.append(entity)
 
     if len(sensors) > 0:
         return sorted(sensors, key=attrgetter("device_class", "name"))
