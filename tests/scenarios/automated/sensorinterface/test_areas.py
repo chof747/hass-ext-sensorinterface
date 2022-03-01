@@ -198,3 +198,35 @@ def test_sensors_from_device(sockets, hassendpoint, SensorStubs):
         "unit": "°C",
         "id": "sensor.ovki_temp",
     }
+
+
+def notest_sensor_with_original(sockets, hassendpoint, SensorStubs):
+    sensor_id = SensorStubs.create_sensor(
+        "wslr_temp", "Temperature Living Room", "temperature", "°C", "wohnzimmer"
+    )
+
+    result = runSocketCommandAndReceiveReturn(
+        "config/entity_registry/update",
+        {
+            "entity_id": sensor_id,
+            "area_id": "wohnzimmer",
+            "name": None,
+            "original_name": "Temperature Living Room",
+            "device_class": None,
+            "original_device_class": "temperature",
+        },
+    )
+
+    result = runSocketCommandAndReceiveReturn(
+        "sensors/areas/next", {"area": "wohnzimmer", "current": result["result"]["id"]}
+    )
+
+    assert result != False
+    assert result["result"] == {
+        "name": "Temperature Living Room",
+        "type": "temperature",
+        "value": "21.7",
+        "unit": "°C",
+        "id": "sensor.wslr_temp",
+    }
+

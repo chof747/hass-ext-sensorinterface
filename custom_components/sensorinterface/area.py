@@ -1,6 +1,6 @@
 from array import array
 import logging
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 from xml.dom.minidom import Entity
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import area_registry, entity_registry, device_registry
@@ -32,22 +32,37 @@ async def prepare_sensor_list(hass: HomeAssistant, area: str) -> list:
             else:
                 aid = entity.area_id
             if aid == area:
-                sensors.append(entity)
+                sensors.append(build_result(hass, entity))
 
     if len(sensors) > 0:
-        return sorted(sensors, key=attrgetter("device_class", "name"))
+        return sorted(sensors, key=itemgetter("type", "name"))
     else:
         return None
 
 
-def build_result(hass: HomeAssistant, selected: Entity) -> dict:
-    state = hass.states.get(selected.entity_id)
+def build_result(hass: HomeAssistant, entity: Entity) -> dict:
+    state = hass.states.get(entity.entity_id)
+
+    if entity.name != None:
+        ent_name = entity.name
+    elif entity.original_name != None:
+        ent_name = entity.original_name
+    else:
+        ent_name = ""
+
+    if entity.device_class != None:
+        ent_devclass = entity.device_class
+    elif entity.original_device_class != None:
+        ent_devclass = entity.original_device_class
+    else:
+        ent_devclass = ""
+
     return {
-        "id": selected.entity_id,
-        "name": selected.name,
-        "type": selected.device_class,
+        "id": entity.entity_id,
+        "name": ent_name,
+        "type": ent_devclass,
         "value": state.state,
-        "unit": selected.unit_of_measurement,
+        "unit": entity.unit_of_measurement,
     }
 
 
@@ -58,12 +73,12 @@ async def get_next_sensor_in_area(hass: HomeAssistant, area: str, current: str) 
 
         selected = sorted_sensors[0]
         for i in range(len(sorted_sensors)):
-            if current == sorted_sensors[i].entity_id:
+            if current == sorted_sensors[i]["id"]:
                 if (i + 1) < len(sorted_sensors):
                     selected = sorted_sensors[i + 1]
                 break
 
-        return build_result(hass, selected)
+        return selected
     else:
         return {}
 
@@ -75,7 +90,7 @@ async def get_prev_sensor_in_area(hass: HomeAssistant, area: str, current: str) 
 
         selected = sorted_sensors[len(sorted_sensors) - 1]
         for i in reversed(range(len(sorted_sensors))):
-            if current == sorted_sensors[i].entity_id:
+            if current == sorted_sensors[i]["id"]:
                 if (i - 1) >= 0:
                     selected = sorted_sensors[i - 1]
                     break
@@ -83,6 +98,6 @@ async def get_prev_sensor_in_area(hass: HomeAssistant, area: str, current: str) 
                     selected = sorted_sensors[len(sorted_sensors) - 1]
                     break
 
-        return build_result(hass, selected)
+        return selected
     else:
         return {}
